@@ -257,6 +257,63 @@ button {
   font-size: clamp(20px, 3vw, 30px);
 }
 
+.import-panel {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  box-shadow: var(--shadow);
+  padding: 14px;
+}
+
+.import-panel strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.import-panel p {
+  margin-bottom: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.import-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+  min-width: 240px;
+}
+
+.import-actions input[type="file"] {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.file-button,
+.import-actions button,
+.import-actions a {
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  background: var(--soft-green);
+  color: var(--green);
+  padding: 9px 11px;
+  font-size: 13px;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.import-actions button {
+  background: #fff;
+}
+
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -477,6 +534,13 @@ td {
   font-size: 13px;
 }
 
+.source-verify {
+  margin-top: 8px;
+  border-left: 3px solid var(--green);
+  padding-left: 9px;
+  font-size: 13px;
+}
+
 .update-card span {
   display: inline-flex;
   margin-bottom: 9px;
@@ -525,7 +589,8 @@ footer {
 
 @media (max-width: 980px) {
   .topbar,
-  .toolbar {
+  .toolbar,
+  .import-panel {
     align-items: flex-start;
     flex-direction: column;
   }
@@ -546,6 +611,11 @@ footer {
 
   .toolbar input {
     max-width: none;
+  }
+
+  .import-actions {
+    justify-content: flex-start;
+    min-width: 0;
   }
 }
 

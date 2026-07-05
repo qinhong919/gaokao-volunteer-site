@@ -232,7 +232,10 @@ window.GAOKAO_DATA = {
       status: "主数据源",
       use: "2026 在滇招生计划、志愿填报须知、一分一段表、批次线、投档线、征集志愿。",
       fields: "字段：年份、省份、批次、科目组合、院校专业组、专业、计划数、分数线、位次。",
-      url: "https://www.ynzs.cn"
+      url: "https://www.ynzs.cn",
+      urlLabel: "打开云南省招考频道",
+      linkStatus: "有效：省级官方入口，具体公告以普通高考栏目和站内搜索为准",
+      verifiedAt: "2026-07-05"
     },
     {
       name: "云南高考考生服务平台",
@@ -241,7 +244,10 @@ window.GAOKAO_DATA = {
       status: "填报入口",
       use: "考生正式填报入口，用于核对真实志愿单位、批次结构、院校专业组显示口径。",
       fields: "字段：批次、志愿序号、院校专业组、专业志愿、服从调剂标志。",
-      url: "https://gk.ynzs.cn"
+      url: "https://gk.ynzs.cn",
+      urlLabel: "打开云南高考考生服务平台",
+      linkStatus: "有效：官方填报和查询平台，涉及个人信息时由考生本人登录核对",
+      verifiedAt: "2026-07-05"
     },
     {
       name: "阳光高考政策库",
@@ -250,7 +256,10 @@ window.GAOKAO_DATA = {
       status: "政策核验",
       use: "云南政策文件、招生章程、特殊类型招生、公示信息，核验省考试院发布内容。",
       fields: "字段：政策标题、发布时间、省份、文件类型、原文链接。",
-      url: "https://gaokao.chsi.com.cn/gkxx/zc/ss?regionId=086530000"
+      url: "https://gaokao.chsi.com.cn/gkxx/zc/ss?regionId=086530000",
+      urlLabel: "打开阳光高考云南政策库",
+      linkStatus: "有效：教育部平台云南政策列表",
+      verifiedAt: "2026-07-05"
     },
     {
       name: "阳光高考院校库",
@@ -259,7 +268,10 @@ window.GAOKAO_DATA = {
       status: "院校底表",
       use: "全国高校基础名单、院校代码、办学层次、主管部门、所在地、办学性质。",
       fields: "字段：院校代码、院校名称、省市、办学性质、层次、主管部门。",
-      url: "https://gaokao.chsi.com.cn/sch/"
+      url: "https://gaokao.chsi.com.cn/sch/",
+      urlLabel: "打开阳光高考院校库",
+      linkStatus: "有效：教育部平台院校查询入口",
+      verifiedAt: "2026-07-05"
     },
     {
       name: "教育部本科专业目录",
@@ -268,16 +280,22 @@ window.GAOKAO_DATA = {
       status: "专业底表",
       use: "本科专业代码、专业名称、专业类、学科门类，用于统一全国专业名称。",
       fields: "字段：专业代码、专业名称、门类、专业类、修业年限、授予学位。",
-      url: "https://www.moe.gov.cn"
+      url: "https://www.moe.gov.cn/srcsite/A08/moe_1034/s3882/202604/t20260427_1434931.html",
+      urlLabel: "打开教育部 2026 本科专业目录",
+      linkStatus: "有效：教育部 2026 年本科专业目录通知页",
+      verifiedAt: "2026-07-05"
     },
     {
-      name: "各高校本科招生网",
-      type: "高校官方",
+      name: "阳光高考招生章程",
+      type: "教育部平台",
       priority: "P1 核验",
-      status: "专业详情",
+      status: "章程核验",
       use: "各校 2026 招生章程、在云南招生专业、体检限制、外语限制、学费、转专业政策。",
       fields: "字段：招生章程链接、专业介绍、学费、体检要求、语种要求、校区。",
-      url: "https://gaokao.chsi.com.cn/sch/"
+      url: "https://gaokao.chsi.com.cn/zsgs/zhangcheng/",
+      urlLabel: "打开阳光高考招生章程",
+      linkStatus: "有效：经审核招生章程查询入口；具体高校还要回到本校招生网复核",
+      verifiedAt: "2026-07-05"
     },
     {
       name: "云南省教育厅",
@@ -286,34 +304,46 @@ window.GAOKAO_DATA = {
       status: "政策补充",
       use: "改革方案、政策解读、分数线转载、官方通知补充核验。",
       fields: "字段：文件标题、发布日期、适用年份、政策要点、链接。",
-      url: "https://jyt.yn.gov.cn"
+      url: "https://jyt.yn.gov.cn",
+      urlLabel: "打开云南省教育厅",
+      linkStatus: "有效：省级教育主管部门入口，政策以考试院和教育厅原文为准",
+      verifiedAt: "2026-07-05"
     },
     {
-      name: "2026 招生考试报/计划专刊",
+      name: "云南 2026 一分一段表",
+      type: "教育部平台转载",
+      priority: "P0 必采",
+      status: "位次底表",
+      use: "云南省招生考试院发布的 2026 高考成绩分数段统计表，用于分数精确匹配官方累计位次。",
+      fields: "字段：年份、省份、物理/历史、分数、同分人数、累计人数。",
+      url: "https://gaokao.chsi.com.cn/gkxx/ss/202606/20260626/2293847808.html",
+      urlLabel: "打开 2026 云南一分一段表",
+      linkStatus: "有效：阳光高考转载云南省招生考试院发布内容",
+      verifiedAt: "2026-07-05"
+    },
+    {
+      name: "云南招生计划专刊",
       type: "纸质或电子资料",
       priority: "P0 必采",
       status: "需 OCR/人工校验",
-      use: "全国高校在云南各批次、各院校专业组的最终招生计划。若无公开结构化文件，这是最关键来源。",
+      use: "全国高校在云南各批次、各院校专业组的最终招生计划。若无公开结构化文件，以考生手中官方计划专刊为准。",
       fields: "字段：院校专业组、专业代码、专业名称、计划数、学费、学制、备注。",
-      url: "https://www.ynzs.cn"
+      url: "https://www.ynzs.cn",
+      urlLabel: "打开省考试院官方入口",
+      linkStatus: "有效：固定公开电子表暂未稳定检索到；纸质/电子计划专刊须人工校验后导入",
+      verifiedAt: "2026-07-05"
     },
     {
-      name: "历年投档线与录取日报",
-      type: "省级官方",
-      priority: "P0 必采",
-      status: "位次换算",
-      use: "2025 起按物理/历史、院校专业组统计；2024 及以前按文理批次做历史参照。",
-      fields: "字段：年份、批次、科类/首选科目、院校专业组、最低分、最低位次、计划完成情况。",
-      url: "https://www.ynzs.cn"
-    },
-    {
-      name: "第三方聚合平台",
+      name: "云南高考动态补充索引",
       type: "补充来源",
       priority: "P2 参考",
       status: "不得作唯一依据",
-      use: "掌上高考、教育在线等用于快速发现缺漏，再回到官方来源核验。",
-      fields: "字段：院校分数、位次、专业说明、来源链接、官方核验状态。",
-      url: "https://yunnan.eol.cn/"
+      use: "教育在线/掌上高考云南动态页用于快速发现政策、分数线、一分一段、志愿须知的缺漏，再回到官方来源核验。",
+      fields: "字段：标题、发布日期、转载来源、原文入口、官方核验状态。",
+      url: "https://gaokao.eol.cn/yun_nan/dongtai/index_2.shtml",
+      urlLabel: "打开云南高考动态索引",
+      linkStatus: "有效：第三方索引页，只作发现线索，不作最终依据",
+      verifiedAt: "2026-07-05"
     }
   ],
   updateRules: [

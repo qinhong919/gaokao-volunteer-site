@@ -5,7 +5,10 @@ const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
 const state = {
   risk: "all",
-  keyword: ""
+  keyword: "",
+  programs: data.programs,
+  dataMode: "demo",
+  importedName: ""
 };
 
 function setupCombos() {
@@ -47,7 +50,8 @@ function renderSources() {
           <p>${source.type}｜${source.status}</p>
           <p>${source.use}</p>
           <p class="source-fields">${source.fields}</p>
-          <p><a href="${source.url}" target="_blank" rel="noreferrer">打开来源</a></p>
+          <p class="source-verify">${source.linkStatus}<br>核验日期：${source.verifiedAt}</p>
+          <p><a href="${source.url}" target="_blank" rel="noreferrer">${source.urlLabel || "打开来源"}</a></p>
         </article>
       `
     )
@@ -87,6 +91,13 @@ function renderPolicyGrid() {
 function selectedSubjects() {
   const combo = data.combos.find((item) => item.id === $("#subjectCombo").value);
   return combo ? combo.subjects : [];
+}
+
+function splitList(value) {
+  return String(value || "")
+    .split(/[+、,，;；|]/)
+    .map((item) => item.trim())
+    .filter(Boolean);
 }
 
 function matchesRequired(program, subjects) {
@@ -184,7 +195,7 @@ function rankAccuracyStatus(rank) {
 
 function filterPrograms() {
   const filters = currentFilters();
-  return data.programs
+  return state.programs
     .filter((program) => program.primary === filters.primary)
     .filter((program) => matchesRequired(program, filters.subjects))
     .filter((program) => filters.major === "all" || program.majorType === filters.major)
@@ -208,7 +219,7 @@ function renderResults() {
   const filters = currentFilters();
   const rows = filterPrograms();
   const cutoff = data.cutoffs.云南[2026][filters.primary];
-  const allMatched = data.programs
+  const allMatched = state.programs
     .filter((program) => program.primary === filters.primary)
     .filter((program) => matchesRequired(program, filters.subjects));
 
@@ -222,16 +233,20 @@ function renderResults() {
   }, { 冲: 0, 稳: 0, 保: 0 });
   $("#riskMix").textContent = rankAccuracyStatus(filters.rank);
   updateRankLookupStatus();
+  renderDataMode();
 
   if (!rows.length) {
+    const emptyMessage = state.dataMode === "demo"
+      ? "当前条件下演示库没有匹配结果。正式库需要导入全国院校专业组计划和历年位次后才能完整查询。"
+      : "当前正式库没有匹配结果。请检查关键词、选科要求、专业方向和院校层次筛选条件，或核对导入 CSV 是否包含该院校专业组。";
     $("#resultBody").innerHTML = `
       <tr>
-        <td colspan="7">当前条件下演示库没有匹配结果。正式库需要导入全国院校专业组计划和历年位次后才能完整查询。</td>
+        <td colspan="7">${emptyMessage}</td>
       </tr>
     `;
     $("#mobileResultBody").innerHTML = `
       <article class="mobile-empty">
-        当前条件下演示库没有匹配结果。正式库需要导入全国院校专业组计划和历年位次后才能完整查询。
+        ${emptyMessage}
       </article>
     `;
     return;
@@ -295,6 +310,134 @@ function renderResults() {
     .join("");
 }
 
+function renderDataMode() {
+  if (state.dataMode === "official") {
+    $("#dataMode").textContent = `当前使用：正式库（${state.programs.length.toLocaleString()} 条）`;
+    $("#importStatus").textContent = `${state.importedName} 已导入。查询结果按导入表中的院校专业组计划和最低位次筛选。`;
+    $("#dataWarning").textContent = "当前结果来自已导入正式库。仍需确认每条记录的 source_url、source_publish_date、verified_status 和 verified_at；待核验记录不应用于最终填报。";
+    return;
+  }
+
+  $("#dataMode").textContent = "当前使用：演示库";
+  $("#importStatus").textContent = "正式查询需导入全国院校专业组计划和历年位次 CSV。";
+  $("#dataWarning").textContent = "当前结果来自演示库，只用于验证查询逻辑，不代表完整可报清单。正式上线要导入全国高校在云南招生计划、2025-2026 投档位次后，才会生成完整冲稳保组合。";
+}
+
+function parseCsv(text) {
+  const rows = [];
+  let row = [];
+  let value = "";
+  let quoted = false;
+
+  for (let index = 0; index < text.length; index += 1) {
+    const char = text[index];
+    const next = text[index + 1];
+
+    if (char === '"' && quoted && next === '"') {
+      value += '"';
+      index += 1;
+    } else if (char === '"') {
+      quoted = !quoted;
+    } else if (char === "," && !quoted) {
+      row.push(value);
+      value = "";
+    } else if ((char === "\n" || char === "\r") && !quoted) {
+      if (char === "\r" && next === "\n") index += 1;
+      row.push(value);
+      if (row.some((cell) => cell.trim())) rows.push(row);
+      row = [];
+      value = "";
+    } else {
+      value += char;
+    }
+  }
+
+  row.push(value);
+  if (row.some((cell) => cell.trim())) rows.push(row);
+  return rows;
+}
+
+function csvToPrograms(text) {
+  const rows = parseCsv(text);
+  if (rows.length < 2) throw new Error("CSV 至少需要表头和一行数据。");
+
+  const headers = rows[0].map((header) => header.trim());
+  const requiredHeaders = [
+    "primary_subject",
+    "university_name",
+    "university_city",
+    "group_code",
+    "major_name",
+    "major_type",
+    "required_subjects",
+    "plan_count",
+    "min_score",
+    "min_rank",
+    "school_level",
+    "ownership"
+  ];
+  const missing = requiredHeaders.filter((header) => !headers.includes(header));
+  if (missing.length) throw new Error(`CSV 缺少字段：${missing.join("、")}`);
+
+  const records = rows.slice(1).map((cells) => Object.fromEntries(headers.map((header, index) => [header, cells[index] || ""])));
+  const programs = records.map((record, index) => {
+    const minRank = Number(record.min_rank);
+    const minScore = Number(record.min_score);
+    const plan = Number(record.plan_count);
+    if (!record.university_name || !record.major_name || !record.group_code) {
+      throw new Error(`第 ${index + 2} 行缺少院校、专业或专业组。`);
+    }
+    if (!Number.isFinite(minRank) || minRank < 1) {
+      throw new Error(`第 ${index + 2} 行 min_rank 不是有效位次。`);
+    }
+
+    return {
+      university: record.university_name.trim(),
+      groupCode: record.group_code.trim(),
+      city: record.university_city.trim() || record.university_province.trim() || "未标注",
+      level: splitList(record.school_level || "普通本科"),
+      ownership: record.ownership.trim() || "未标注",
+      major: record.major_name.trim(),
+      majorType: record.major_type.trim() || "未分类",
+      batch: record.batch.trim() || "本科批",
+      primary: record.primary_subject.trim(),
+      required: splitList(record.required_subjects || record.primary_subject),
+      plan: Number.isFinite(plan) && plan > 0 ? plan : 0,
+      minScore2025: Number.isFinite(minScore) ? minScore : 0,
+      minRank2025: minRank,
+      fee: record.tuition ? `${record.tuition} 元/年` : "未标注",
+      sourceStatus: `${record.verified_status || "待核验"}｜${record.source_name || "未标注来源"}`
+    };
+  });
+
+  return programs;
+}
+
+function importOfficialCsv(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const programs = csvToPrograms(String(reader.result || ""));
+      state.programs = programs;
+      state.dataMode = "official";
+      state.importedName = file.name;
+      renderResults();
+    } catch (error) {
+      $("#importStatus").textContent = `导入失败：${error.message}`;
+    }
+  };
+  reader.readAsText(file, "utf-8");
+}
+
+function resetDemoData() {
+  state.programs = data.programs;
+  state.dataMode = "demo";
+  state.importedName = "";
+  $("#programImport").value = "";
+  renderResults();
+}
+
 function bindEvents() {
   $("#primarySubject").addEventListener("change", () => {
     setupCombos();
@@ -302,6 +445,8 @@ function bindEvents() {
   });
 
   $("#rankLookupButton").addEventListener("click", applyRankLookup);
+  $("#programImport").addEventListener("change", (event) => importOfficialCsv(event.target.files[0]));
+  $("#resetDemoData").addEventListener("click", resetDemoData);
 
   $("#searchForm").addEventListener("submit", (event) => {
     event.preventDefault();

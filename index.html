@@ -104,9 +104,22 @@
               <strong id="matchCount">0</strong>
             </article>
             <article>
-              <span>准确性状态</span>
+              <span id="dataStatusLabel">准确性状态</span>
               <strong id="riskMix">-</strong>
             </article>
+          </div>
+
+          <div class="import-panel">
+            <div>
+              <strong id="dataMode">当前使用：演示库</strong>
+              <p id="importStatus">正式查询需导入全国院校专业组计划和历年位次 CSV。</p>
+            </div>
+            <div class="import-actions">
+              <label class="file-button" for="programImport">导入正式库 CSV</label>
+              <input id="programImport" type="file" accept=".csv,text/csv" />
+              <button type="button" id="resetDemoData">恢复演示库</button>
+              <a href="./data/import-template.csv" download>下载模板</a>
+            </div>
           </div>
 
           <div class="toolbar">
@@ -119,7 +132,7 @@
             <input id="keyword" type="search" placeholder="搜索院校或专业" />
           </div>
 
-          <div class="data-warning">
+          <div class="data-warning" id="dataWarning">
             当前结果来自演示库，只用于验证查询逻辑，不代表完整可报清单。正式上线要导入全国高校在云南招生计划、2025-2026 投档位次后，才会生成完整冲稳保组合。
           </div>
 
