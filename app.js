@@ -102,6 +102,11 @@ function currentFilters() {
   };
 }
 
+function rankAccuracyStatus(rank) {
+  if (!rank || rank < 1) return "需官方位次";
+  return "按位次筛";
+}
+
 function filterPrograms() {
   const filters = currentFilters();
   return data.programs
@@ -140,7 +145,7 @@ function renderResults() {
     acc[risk] += 1;
     return acc;
   }, { 冲: 0, 稳: 0, 保: 0 });
-  $("#riskMix").textContent = `冲${mix.冲} / 稳${mix.稳} / 保${mix.保}`;
+  $("#riskMix").textContent = rankAccuracyStatus(filters.rank);
 
   if (!rows.length) {
     $("#resultBody").innerHTML = `
@@ -240,6 +245,7 @@ function bindEvents() {
   });
 
   ["subjectCombo", "majorInterest", "schoolLevel", "score", "rank"].forEach((id) => {
+    $(`#${id}`).addEventListener("input", renderResults);
     $(`#${id}`).addEventListener("change", renderResults);
   });
 }
