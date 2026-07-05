@@ -179,6 +179,52 @@ button {
   line-height: 1.55;
 }
 
+.rank-tools {
+  display: grid;
+  gap: 8px;
+  margin: -2px 0 14px;
+}
+
+.rank-tools button {
+  width: 100%;
+  border: 1px solid var(--green);
+  border-radius: 8px;
+  background: var(--soft-green);
+  color: var(--green);
+  padding: 11px 12px;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.rank-tools p {
+  margin: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--muted);
+  padding: 9px 10px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.rank-tools p.is-ok {
+  border-color: #c9dfd5;
+  background: var(--soft-green);
+  color: var(--green);
+}
+
+.rank-tools p.is-warn {
+  border-color: #ead3a8;
+  background: var(--soft-amber);
+  color: #6d4a16;
+}
+
+.rank-tools p.is-alert {
+  border-color: #efc2bd;
+  background: #fde8e5;
+  color: var(--red);
+}
+
 .results {
   min-width: 0;
 }
@@ -328,6 +374,7 @@ td {
 
 .combo-card,
 .source-card,
+.update-card,
 .policy-card,
 .schema-grid article {
   border: 1px solid var(--line);
@@ -338,6 +385,7 @@ td {
 
 .combo-card strong,
 .source-card strong,
+.update-card strong,
 .policy-card strong {
   display: block;
   margin-bottom: 6px;
@@ -345,6 +393,7 @@ td {
 
 .combo-card p,
 .source-card p,
+.update-card p,
 .policy-card p,
 .schema-grid p {
   margin-bottom: 0;
@@ -373,6 +422,33 @@ td {
   line-height: 1.65;
 }
 
+.update-panel {
+  margin-bottom: 12px;
+  border: 1px solid #c9dfd5;
+  border-radius: 8px;
+  background: var(--soft-green);
+  padding: 13px 14px;
+}
+
+.update-panel strong {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--green);
+}
+
+.update-panel p {
+  margin-bottom: 0;
+  color: #31584b;
+  line-height: 1.6;
+}
+
+.update-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
 .source-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -399,6 +475,21 @@ td {
 .source-fields {
   margin-top: 8px;
   font-size: 13px;
+}
+
+.update-card span {
+  display: inline-flex;
+  margin-bottom: 9px;
+  border-radius: 999px;
+  background: var(--soft-amber);
+  color: #6d4a16;
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.update-card p + p {
+  margin-top: 7px;
 }
 
 .policy-card span {
@@ -442,6 +533,7 @@ footer {
   .dashboard,
   .content-grid,
   .source-grid,
+  .update-grid,
   .policy-grid,
   .schema-grid {
     grid-template-columns: 1fr;

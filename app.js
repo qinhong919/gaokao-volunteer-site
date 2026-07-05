@@ -1,4 +1,5 @@
 const data = window.GAOKAO_DATA;
+const rankData = window.GAOKAO_RANK_DATA || {};
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
@@ -47,6 +48,22 @@ function renderSources() {
           <p>${source.use}</p>
           <p class="source-fields">${source.fields}</p>
           <p><a href="${source.url}" target="_blank" rel="noreferrer">打开来源</a></p>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderUpdateRules() {
+  $("#updateGrid").innerHTML = data.updateRules
+    .map(
+      (rule) => `
+        <article class="update-card">
+          <strong>${rule.name}</strong>
+          <span>${rule.cadence}</span>
+          <p>${rule.owner}</p>
+          <p>${rule.freshness}</p>
+          <p>${rule.action}</p>
         </article>
       `
     )
@@ -102,8 +119,66 @@ function currentFilters() {
   };
 }
 
+function getRankTable() {
+  const province = $("#province").value;
+  const primary = $("#primarySubject").value;
+  return rankData[province]?.[2026]?.[primary] || null;
+}
+
+function getRankMatch() {
+  const table = getRankTable();
+  const score = Number($("#score").value || 0);
+  if (!table || !score) return null;
+  const matchedRank = table.rows[String(score)];
+  if (!matchedRank) return { table, score, matchedRank: null };
+  return { table, score, matchedRank };
+}
+
+function updateRankLookupStatus() {
+  const status = $("#rankLookupStatus");
+  const rank = Number($("#rank").value || 0);
+  const match = getRankMatch();
+
+  if (!match) {
+    status.textContent = "当前省份或科类还没有接入公开一分一段数据。请使用官方成绩查询或一分一段表录入位次。";
+    status.className = "";
+    return;
+  }
+
+  if (!match.matchedRank) {
+    status.textContent = `${match.table.label} 暂未收录 ${match.score} 分的结构化位次。请用云南省官方一分一段表填写，导入完整表后可自动匹配。`;
+    status.className = "is-warn";
+    return;
+  }
+
+  const isConsistent = Math.abs(rank - match.matchedRank) <= 0;
+  status.textContent = isConsistent
+    ? `已匹配：${match.score} 分对应累计位次 ${match.matchedRank.toLocaleString()}。${match.table.verification}`
+    : `公开表显示 ${match.score} 分对应累计位次 ${match.matchedRank.toLocaleString()}；当前填写 ${rank.toLocaleString()}，两者不一致。`;
+  status.className = isConsistent ? "is-ok" : "is-alert";
+}
+
+function applyRankLookup() {
+  const match = getRankMatch();
+  if (!match?.matchedRank) {
+    updateRankLookupStatus();
+    return;
+  }
+
+  $("#rank").value = match.matchedRank;
+  updateRankLookupStatus();
+  renderResults();
+}
+
+function isRankConsistentWithPublicData() {
+  const match = getRankMatch();
+  if (!match?.matchedRank) return true;
+  return Number($("#rank").value || 0) === match.matchedRank;
+}
+
 function rankAccuracyStatus(rank) {
   if (!rank || rank < 1) return "需官方位次";
+  if (!isRankConsistentWithPublicData()) return "位次待核";
   return "按位次筛";
 }
 
@@ -146,6 +221,7 @@ function renderResults() {
     return acc;
   }, { 冲: 0, 稳: 0, 保: 0 });
   $("#riskMix").textContent = rankAccuracyStatus(filters.rank);
+  updateRankLookupStatus();
 
   if (!rows.length) {
     $("#resultBody").innerHTML = `
@@ -225,6 +301,8 @@ function bindEvents() {
     renderResults();
   });
 
+  $("#rankLookupButton").addEventListener("click", applyRankLookup);
+
   $("#searchForm").addEventListener("submit", (event) => {
     event.preventDefault();
     renderResults();
@@ -253,6 +331,7 @@ function bindEvents() {
 setupCombos();
 renderComboGrid();
 renderSources();
+renderUpdateRules();
 renderPolicyGrid();
 bindEvents();
 renderResults();

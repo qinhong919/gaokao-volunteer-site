@@ -59,6 +59,10 @@
             </label>
           </div>
           <p class="field-help">位次必须来自云南省官方成绩查询或一分一段表。不要用分数自行估算位次，否则“冲稳保”会失真。</p>
+          <div class="rank-tools">
+            <button type="button" id="rankLookupButton">按公开一分一段匹配位次</button>
+            <p id="rankLookupStatus">已接入部分 2026 云南公开一分一段数据；未收录分数仍需手工录入官方位次。</p>
+          </div>
 
           <label>
             专业方向
@@ -178,6 +182,11 @@
           <h2>全国高校在滇招生数据源</h2>
         </div>
         <p class="source-intro">正式库要按“招生计划 -> 选科要求 -> 历年投档/录取 -> 院校专业详情”四层采集。优先用官方原始数据，第三方平台只做补充核验。</p>
+        <div class="update-panel">
+          <strong>更新要求</strong>
+          <p>全国高校在滇招生数据必须按官方发布时间滚动更新。填报期内，招生计划、征集志愿、投档线属于高频数据，超过核验时限的记录要标记为“待更新”，不能直接用于正式推荐。</p>
+        </div>
+        <div class="update-grid" id="updateGrid"></div>
         <div class="source-grid" id="sourceGrid"></div>
       </section>
 
@@ -216,6 +225,7 @@
     </footer>
 
     <script src="./data/sample-data.js"></script>
+    <script src="./data/rank-data.js"></script>
     <script src="./app.js"></script>
   </body>
 </html>
