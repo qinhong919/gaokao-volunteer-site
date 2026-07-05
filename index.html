@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>高考志愿数据查询系统</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">云南 3+1+2 新高考 · GitHub Pages 原型</p>
+        <h1>高考志愿数据查询系统</h1>
+      </div>
+      <nav aria-label="主要页面">
+        <a href="#query">查询</a>
+        <a href="#subjects">选科</a>
+        <a href="#sources">数据源</a>
+        <a href="#schema">字段</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="dashboard" id="query">
+        <form class="panel controls" id="searchForm">
+          <div class="section-title">
+            <span>01</span>
+            <h2>考生条件</h2>
+          </div>
+
+          <label>
+            考生省份
+            <select id="province">
+              <option value="云南">云南</option>
+            </select>
+          </label>
+
+          <label>
+            首选科目
+            <select id="primarySubject">
+              <option value="物理">物理</option>
+              <option value="历史">历史</option>
+            </select>
+          </label>
+
+          <label>
+            选科组合
+            <select id="subjectCombo"></select>
+          </label>
+
+          <div class="field-row">
+            <label>
+              高考总分
+              <input id="score" type="number" min="0" max="750" value="560" />
+            </label>
+            <label>
+              全省位次
+              <input id="rank" type="number" min="1" value="32000" />
+            </label>
+          </div>
+
+          <label>
+            专业方向
+            <select id="majorInterest">
+              <option value="all">不限</option>
+              <option value="工学">工学</option>
+              <option value="医学">医学</option>
+              <option value="经济管理">经济管理</option>
+              <option value="师范">师范</option>
+              <option value="法学">法学</option>
+              <option value="农学">农学</option>
+            </select>
+          </label>
+
+          <label>
+            院校层次
+            <select id="schoolLevel">
+              <option value="all">不限</option>
+              <option value="985">985</option>
+              <option value="211">211 / 双一流</option>
+              <option value="省重点">省重点 / 一本传统强校</option>
+              <option value="普通本科">普通本科 / 二本传统院校</option>
+              <option value="民办本科">民办本科</option>
+            </select>
+          </label>
+
+          <button type="submit">更新查询结果</button>
+          <p class="note">云南 2025 年起不再按传统文理科填报，本系统以“物理类/历史类 + 院校专业组 + 选科要求”作为主线。</p>
+        </form>
+
+        <section class="results">
+          <div class="status-grid">
+            <article>
+              <span>2026 本科线</span>
+              <strong id="lineCard">物理 435</strong>
+            </article>
+            <article>
+              <span>匹配专业组</span>
+              <strong id="matchCount">0</strong>
+            </article>
+            <article>
+              <span>风险分布</span>
+              <strong id="riskMix">-</strong>
+            </article>
+          </div>
+
+          <div class="toolbar">
+            <div class="tabs" role="tablist" aria-label="风险分类">
+              <button class="active" type="button" data-risk="all">全部</button>
+              <button type="button" data-risk="冲">冲</button>
+              <button type="button" data-risk="稳">稳</button>
+              <button type="button" data-risk="保">保</button>
+            </div>
+            <input id="keyword" type="search" placeholder="搜索院校或专业" />
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>梯度</th>
+                  <th>院校专业组</th>
+                  <th>专业</th>
+                  <th>选科要求</th>
+                  <th>2025 最低</th>
+                  <th>计划</th>
+                  <th>建议</th>
+                </tr>
+              </thead>
+              <tbody id="resultBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <section class="content-grid" id="subjects">
+        <div class="panel">
+          <div class="section-title">
+            <span>02</span>
+            <h2>云南 12 种选科组合</h2>
+          </div>
+          <div class="combo-grid" id="comboGrid"></div>
+        </div>
+
+        <div class="panel">
+          <div class="section-title">
+            <span>03</span>
+            <h2>建库判断规则</h2>
+          </div>
+          <ul class="rule-list">
+            <li><strong>先看首选：</strong>物理类和历史类分开划线、分开投档。</li>
+            <li><strong>再看必选：</strong>要求“物理+化学”的专业，物生地、物政地不能报。</li>
+            <li><strong>最后看位次：</strong>分数只能粗筛，正式推荐必须用一分一段位次。</li>
+            <li><strong>一本二本：</strong>新高考本科批合并后，用院校层次和往年录取位次替代旧标签。</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="panel" id="sources">
+        <div class="section-title">
+          <span>04</span>
+          <h2>信息源草稿库</h2>
+        </div>
+        <div class="source-grid" id="sourceGrid"></div>
+      </section>
+
+      <section class="panel" id="schema">
+        <div class="section-title">
+          <span>05</span>
+          <h2>数据库字段草案</h2>
+        </div>
+        <div class="schema-grid">
+          <article>
+            <h3>考生表</h3>
+            <p>省份、首选科目、再选科目、总分、位次、特殊资格、体检限制、地域偏好。</p>
+          </article>
+          <article>
+            <h3>院校表</h3>
+            <p>院校代码、院校名称、所在地、办学性质、层次标签、主管部门、招生章程链接。</p>
+          </article>
+          <article>
+            <h3>专业组表</h3>
+            <p>年份、省份、批次、院校专业组代码、专业代码、选科要求、计划数、学费、学制。</p>
+          </article>
+          <article>
+            <h3>录取表</h3>
+            <p>年份、省份、首选科目、最低分、最低位次、平均分、最高分、征集状态、数据来源。</p>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>本原型只提供数据结构和查询逻辑示范。正式填报必须以云南省招生考试院、阳光高考平台和高校招生章程为准。</p>
+    </footer>
+
+    <script src="./data/sample-data.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
