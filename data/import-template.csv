@@ -1,2 +1,2 @@
-year,province,batch,primary_subject,subject_combo,university_code,university_name,group_code,major_code,major_name,major_type,required_subjects,plan_count,min_score,min_rank,avg_score,tuition,school_level,ownership,source_name,source_url,verified_at
-2026,云南,本科批,物理,物化生,示例代码,示例大学,示例专业组,080901,计算机科学与技术,工学,物理+化学,60,580,15000,590,4500,省重点,公办,云南省招生考试院,https://www.ynzs.cn,2026-07-05
+year,student_province,student_city,batch,admission_category,primary_subject,subject_combo,university_code,university_name,university_province,university_city,group_code,major_code,major_name,major_type,required_subjects,plan_count,min_score,min_rank,avg_score,tuition,school_level,ownership,source_name,source_url,source_publish_date,verified_status,verified_at
+2026,云南,昆明,本科批,普通类,物理,物化生,示例代码,示例大学,示例省份,示例城市,示例专业组,080901,计算机科学与技术,工学,物理+化学,60,580,15000,590,4500,省重点,公办,云南省招生考试院,https://www.ynzs.cn,2026-06-25,待核验,2026-07-05

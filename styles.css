@@ -307,6 +307,7 @@ td {
 
 .combo-card,
 .source-card,
+.policy-card,
 .schema-grid article {
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -315,13 +316,15 @@ td {
 }
 
 .combo-card strong,
-.source-card strong {
+.source-card strong,
+.policy-card strong {
   display: block;
   margin-bottom: 6px;
 }
 
 .combo-card p,
 .source-card p,
+.policy-card p,
 .schema-grid p {
   margin-bottom: 0;
   color: var(--muted);
@@ -337,15 +340,55 @@ td {
   line-height: 1.65;
 }
 
+#policy,
 #sources,
 #schema {
   margin-top: 22px;
+}
+
+.source-intro {
+  margin-bottom: 14px;
+  color: var(--muted);
+  line-height: 1.65;
 }
 
 .source-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+}
+
+.policy-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.source-rank {
+  display: inline-flex;
+  margin-bottom: 10px;
+  border-radius: 999px;
+  background: var(--soft-blue);
+  color: var(--blue);
+  padding: 4px 8px;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.source-fields {
+  margin-top: 8px;
+  font-size: 13px;
+}
+
+.policy-card span {
+  display: inline-flex;
+  margin-top: 10px;
+  border-radius: 999px;
+  background: var(--soft-green);
+  color: var(--green);
+  padding: 5px 9px;
+  font-size: 12px;
+  font-weight: 800;
 }
 
 .source-card a {
@@ -378,6 +421,7 @@ footer {
   .dashboard,
   .content-grid,
   .source-grid,
+  .policy-grid,
   .schema-grid {
     grid-template-columns: 1fr;
   }

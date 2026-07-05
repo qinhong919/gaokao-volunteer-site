@@ -9,7 +9,7 @@
   <body>
     <header class="topbar">
       <div>
-        <p class="eyebrow">云南 3+1+2 新高考 · GitHub Pages 原型</p>
+        <p class="eyebrow">云南 2026 新高考 · 全国高校在滇招生</p>
         <h1>高考志愿数据查询系统</h1>
       </div>
       <nav aria-label="主要页面">
@@ -85,7 +85,7 @@
           </label>
 
           <button type="submit">更新查询结果</button>
-          <p class="note">云南 2025 年起不再按传统文理科填报，本系统以“物理类/历史类 + 院校专业组 + 选科要求”作为主线。</p>
+          <p class="note">昆明考生按云南省统一招生计划、云南省位次和云南省投档规则填报；城市只作为院校所在地筛选条件。</p>
         </form>
 
         <section class="results">
@@ -153,22 +153,32 @@
             <li><strong>先看首选：</strong>物理类和历史类分开划线、分开投档。</li>
             <li><strong>再看必选：</strong>要求“物理+化学”的专业，物生地、物政地不能报。</li>
             <li><strong>最后看位次：</strong>分数只能粗筛，正式推荐必须用一分一段位次。</li>
-            <li><strong>一本二本：</strong>新高考本科批合并后，用院校层次和往年录取位次替代旧标签。</li>
+            <li><strong>志愿单位：</strong>普通类以“院校专业组”为核心，组内专业还要看调剂风险。</li>
+            <li><strong>一本二本：</strong>新高考本科批合并后，用院校层次、专业实力和录取位次替代旧标签。</li>
           </ul>
         </div>
       </section>
 
-      <section class="panel" id="sources">
+      <section class="panel" id="policy">
         <div class="section-title">
           <span>04</span>
-          <h2>信息源草稿库</h2>
+          <h2>政策匹配检查</h2>
         </div>
+        <div class="policy-grid" id="policyGrid"></div>
+      </section>
+
+      <section class="panel" id="sources">
+        <div class="section-title">
+          <span>05</span>
+          <h2>全国高校在滇招生数据源</h2>
+        </div>
+        <p class="source-intro">正式库要按“招生计划 -> 选科要求 -> 历年投档/录取 -> 院校专业详情”四层采集。优先用官方原始数据，第三方平台只做补充核验。</p>
         <div class="source-grid" id="sourceGrid"></div>
       </section>
 
       <section class="panel" id="schema">
         <div class="section-title">
-          <span>05</span>
+          <span>06</span>
           <h2>数据库字段草案</h2>
         </div>
         <div class="schema-grid">
@@ -182,11 +192,15 @@
           </article>
           <article>
             <h3>专业组表</h3>
-            <p>年份、省份、批次、院校专业组代码、专业代码、选科要求、计划数、学费、学制。</p>
+            <p>年份、招生省份、批次、院校专业组代码、专业代码、选科要求、计划数、学费、学制。</p>
           </article>
           <article>
             <h3>录取表</h3>
             <p>年份、省份、首选科目、最低分、最低位次、平均分、最高分、征集状态、数据来源。</p>
+          </article>
+          <article>
+            <h3>来源表</h3>
+            <p>来源名称、官方层级、链接、发布时间、采集方式、校验人、校验状态、更新时间。</p>
           </article>
         </div>
       </section>

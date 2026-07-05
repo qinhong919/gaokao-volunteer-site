@@ -41,10 +41,26 @@ function renderSources() {
     .map(
       (source) => `
         <article class="source-card">
+          <span class="source-rank">${source.priority}</span>
           <strong>${source.name}</strong>
-          <p>${source.type}</p>
+          <p>${source.type}｜${source.status}</p>
           <p>${source.use}</p>
+          <p class="source-fields">${source.fields}</p>
           <p><a href="${source.url}" target="_blank" rel="noreferrer">打开来源</a></p>
+        </article>
+      `
+    )
+    .join("");
+}
+
+function renderPolicyGrid() {
+  $("#policyGrid").innerHTML = data.policyChecks
+    .map(
+      (item) => `
+        <article class="policy-card">
+          <strong>${item.title}</strong>
+          <p>${item.detail}</p>
+          <span>${item.status}</span>
         </article>
       `
     )
@@ -231,5 +247,6 @@ function bindEvents() {
 setupCombos();
 renderComboGrid();
 renderSources();
+renderPolicyGrid();
 bindEvents();
 renderResults();
