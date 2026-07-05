@@ -234,6 +234,17 @@ button {
   max-width: 260px;
 }
 
+.data-warning {
+  margin-bottom: 12px;
+  border: 1px solid #ead3a8;
+  border-radius: 8px;
+  background: var(--soft-amber);
+  color: #6d4a16;
+  padding: 11px 12px;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
 .table-wrap {
   overflow: auto;
   border: 1px solid var(--line);
