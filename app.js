@@ -132,6 +132,11 @@ function renderResults() {
         <td colspan="7">当前条件下演示库没有匹配结果。正式库需要导入全国院校专业组计划和历年位次后才能完整查询。</td>
       </tr>
     `;
+    $("#mobileResultBody").innerHTML = `
+      <article class="mobile-empty">
+        当前条件下演示库没有匹配结果。正式库需要导入全国院校专业组计划和历年位次后才能完整查询。
+      </article>
+    `;
     return;
   }
 
@@ -154,6 +159,40 @@ function renderResults() {
           <td>${program.plan} 人</td>
           <td>${adviceFor(program.risk, program)}<br><span class="note">${program.sourceStatus}</span></td>
         </tr>
+      `
+    )
+    .join("");
+
+  $("#mobileResultBody").innerHTML = rows
+    .map(
+      (program) => `
+        <article class="result-card">
+          <div class="result-card-head">
+            <span class="badge risk-${program.risk}">${program.risk}</span>
+            <span>${program.city}｜${program.ownership}</span>
+          </div>
+          <h3>${program.university}</h3>
+          <p class="major-line">${program.major}</p>
+          <dl>
+            <div>
+              <dt>专业组</dt>
+              <dd>${program.groupCode}</dd>
+            </div>
+            <div>
+              <dt>选科</dt>
+              <dd>${program.required.join(" + ")}</dd>
+            </div>
+            <div>
+              <dt>2025 最低</dt>
+              <dd>${program.minScore2025} 分 / ${program.minRank2025.toLocaleString()} 位</dd>
+            </div>
+            <div>
+              <dt>计划</dt>
+              <dd>${program.plan} 人</dd>
+            </div>
+          </dl>
+          <p class="card-advice">${adviceFor(program.risk, program)}</p>
+        </article>
       `
     )
     .join("");

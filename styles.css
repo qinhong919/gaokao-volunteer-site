@@ -232,6 +232,10 @@ button {
   box-shadow: var(--shadow);
 }
 
+.mobile-results {
+  display: none;
+}
+
 table {
   width: 100%;
   min-width: 920px;
@@ -389,6 +393,164 @@ footer {
 }
 
 @media (max-width: 620px) {
+  .topbar {
+    position: static;
+    gap: 14px;
+    padding: 16px;
+  }
+
+  .eyebrow {
+    font-size: 12px;
+  }
+
+  h1 {
+    font-size: 24px;
+    line-height: 1.2;
+  }
+
+  nav {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    gap: 6px;
+  }
+
+  nav a {
+    padding: 8px 4px;
+    text-align: center;
+    font-size: 13px;
+  }
+
+  main {
+    padding: 14px 12px 30px;
+  }
+
+  .controls,
+  .content-grid .panel,
+  #sources,
+  #schema {
+    padding: 14px;
+  }
+
+  .section-title {
+    margin-bottom: 12px;
+  }
+
+  .section-title h2 {
+    font-size: 18px;
+  }
+
+  label {
+    margin-bottom: 11px;
+  }
+
+  input,
+  select {
+    min-height: 46px;
+    font-size: 16px;
+  }
+
+  .controls button[type="submit"] {
+    min-height: 48px;
+  }
+
+  .status-grid article {
+    min-height: 74px;
+    padding: 12px;
+  }
+
+  .status-grid strong {
+    font-size: 24px;
+  }
+
+  .tabs {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    width: 100%;
+    gap: 6px;
+  }
+
+  .tabs button {
+    min-height: 42px;
+    padding: 8px 4px;
+  }
+
+  .toolbar {
+    gap: 8px;
+  }
+
+  .table-wrap {
+    display: none;
+  }
+
+  .mobile-results {
+    display: grid;
+    gap: 10px;
+  }
+
+  .result-card,
+  .mobile-empty {
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: var(--panel);
+    padding: 14px;
+    box-shadow: var(--shadow);
+  }
+
+  .result-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .result-card h3 {
+    margin: 12px 0 6px;
+    font-size: 19px;
+    line-height: 1.25;
+  }
+
+  .major-line {
+    margin-bottom: 12px;
+    color: var(--green);
+    font-weight: 800;
+  }
+
+  .result-card dl {
+    display: grid;
+    gap: 8px;
+    margin: 0;
+  }
+
+  .result-card dl div {
+    display: grid;
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 10px;
+  }
+
+  .result-card dt {
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .result-card dd {
+    margin: 0;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  .card-advice {
+    margin: 12px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    line-height: 1.55;
+  }
+
   .combo-grid,
   .status-grid,
   .field-row {
