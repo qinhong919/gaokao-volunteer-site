@@ -14,6 +14,7 @@
 - 可接入公开一分一段数据做精确匹配：当前仅内置已核验摘录点，未收录分数不会自动估算
 - 增加数据更新时效规则：填报期内对招生计划、征集志愿、投档线做高频核验，过期数据不进入正式推荐
 - 支持在网页中导入正式库 CSV：导入后用全国院校专业组计划和历年位次替换演示库
+- 支持仓库自动正式库：把全量数据放入 `data/official-programs.csv` 后，网站打开时会自动加载正式库
 
 ## 数据完整性说明
 
@@ -25,7 +26,7 @@
 
 ## 正式库导入
 
-网页支持导入 `data/import-template.csv` 同格式的正式库。必需字段包括：
+网页支持导入 `data/import-template.csv` 同格式的正式库，也支持把全量正式库直接保存为 `data/official-programs.csv`，让 GitHub Pages 自动加载。必需字段包括：
 
 - `primary_subject`：物理或历史
 - `university_name`、`university_city`、`group_code`
@@ -34,6 +35,8 @@
 - `school_level`、`ownership`
 
 导入后，关键词搜索、选科过滤、院校层次过滤和冲稳保分类都会使用正式库。正式填报前仍需逐条核验 `source_url`、`source_publish_date`、`verified_status`、`verified_at`。
+
+历年位次可以同时放入 `min_score_2026`、`min_rank_2026`、`min_score_2025`、`min_rank_2025`、`min_score_2024`、`min_rank_2024`。当前冲稳保默认优先读取 `min_rank`，没有时再读取年度位次字段。
 
 ## 重要口径
 
@@ -63,6 +66,7 @@
 - `data/sample-data.js`：演示数据
 - `data/rank-data.js`：公开一分一段摘录数据
 - `data/import-template.csv`：正式数据导入字段模板
+- `data/official-programs.csv`：正式库自动加载文件；当前只有表头，导入全量数据后才会启用
 
 ## 本地预览
 

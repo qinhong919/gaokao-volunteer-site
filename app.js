@@ -323,6 +323,13 @@ function renderDataMode() {
   $("#dataWarning").textContent = "当前结果来自演示库，只用于验证查询逻辑，不代表完整可报清单。正式上线要导入全国高校在云南招生计划、2025-2026 投档位次后，才会生成完整冲稳保组合。";
 }
 
+function useOfficialPrograms(programs, importedName) {
+  state.programs = programs;
+  state.dataMode = "official";
+  state.importedName = importedName;
+  renderResults();
+}
+
 function parseCsv(text) {
   const rows = [];
   let row = [];
@@ -381,8 +388,8 @@ function csvToPrograms(text) {
 
   const records = rows.slice(1).map((cells) => Object.fromEntries(headers.map((header, index) => [header, cells[index] || ""])));
   const programs = records.map((record, index) => {
-    const minRank = Number(record.min_rank);
-    const minScore = Number(record.min_score);
+    const minRank = Number(record.min_rank || record.min_rank_2025 || record.min_rank_2026 || record.min_rank_2024);
+    const minScore = Number(record.min_score || record.min_score_2025 || record.min_score_2026 || record.min_score_2024);
     const plan = Number(record.plan_count);
     if (!record.university_name || !record.major_name || !record.group_code) {
       throw new Error(`第 ${index + 2} 行缺少院校、专业或专业组。`);
@@ -419,10 +426,7 @@ function importOfficialCsv(file) {
   reader.onload = () => {
     try {
       const programs = csvToPrograms(String(reader.result || ""));
-      state.programs = programs;
-      state.dataMode = "official";
-      state.importedName = file.name;
-      renderResults();
+      useOfficialPrograms(programs, file.name);
     } catch (error) {
       $("#importStatus").textContent = `导入失败：${error.message}`;
     }
@@ -436,6 +440,23 @@ function resetDemoData() {
   state.importedName = "";
   $("#programImport").value = "";
   renderResults();
+}
+
+async function loadBundledOfficialData() {
+  try {
+    const response = await fetch("./data/official-programs.csv", { cache: "no-store" });
+    if (!response.ok) return;
+    const text = await response.text();
+    const rows = parseCsv(text);
+    if (rows.length < 2) {
+      $("#importStatus").textContent = "已检测到 data/official-programs.csv，但还没有正式数据行。";
+      return;
+    }
+    const programs = csvToPrograms(text);
+    useOfficialPrograms(programs, "data/official-programs.csv");
+  } catch (error) {
+    $("#importStatus").textContent = `自动加载正式库失败：${error.message}`;
+  }
 }
 
 function bindEvents() {
@@ -480,3 +501,4 @@ renderUpdateRules();
 renderPolicyGrid();
 bindEvents();
 renderResults();
+loadBundledOfficialData();
